@@ -71,4 +71,3 @@ Note for `sn-jnl`: `\footnotesize` is smaller than `\scriptsize`. Red `\tbd{}` m
 
 * [RESULTS.md](../RESULTS.md): dated journal entries (hand-written, above the AUTO block) + generated tables.
 * [attempts/ATTEMPTS.md](../attempts/ATTEMPTS.md): one entry per change (hypothesis, change, result, decision).
-* The owner's assistant also keeps notes outside the repository; do not rely on them.

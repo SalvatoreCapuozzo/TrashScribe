@@ -1,26 +1,40 @@
+# Python
 .venv*/
-.DS_Store
-._*
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# OS and editors
+.DS_Store
+._*
+.vscode/
+.idea/
+
+# Runs, checkpoints and exported graphs (large; see "Pretrained models" in README.md)
 runs/*/
 runs/*.log
+runs/_queue_status*.json
+runs/_queue_status.json*
 !runs/README.md
 export/
 *.onnx
 *.engine
 *.pt
 *.npy
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.bbl
-paper/*.blg
-paper/*.synctex.gz
-paper/*.fdb_latexmk
-paper/*.fls
-.pytest_cache/
-runs/_queue_status.json*
-AGENTS.md
-CLAUDE.md
+
+# Released weights of the deployed model (see "Pretrained model" in README.md)
+!weights/*/best.pt
+!weights/*/atlas_cache.pt
+weights/*/export/
+
+# Manuscript (kept locally, not part of the public repository)
+paper/
+
+# Local notes and files not part of the public repository
+docs/CONTEXT.md
+docs/HISTORY.md
+docs/MIGRATION.md
+docs/NEXT_STEPS.md
+docs/SOTA.md
+docs/FILES_TO_COPY.md
+stop_and_restart.txt

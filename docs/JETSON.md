@@ -98,7 +98,7 @@ needs JetPack 6.2). What changed to make the pipeline run there:
   has no aarch64 wheel for Python 3.8 and is not needed. The engine keeps the name `trashscribe_640_<prec>.engine`.
 * **Not possible on JetPack 5.1**: SAM 3 and the PyTorch backend need `transformers 5.2` (Python ≥ 3.10).
   Done on JetPack 6.2 (section above).
-* **Root-only steps** (the agent has no sudo): `sudo jetson_clocks` (GPU otherwise idles at 306 of 625 MHz) and
+* **Root-only steps**: `sudo jetson_clocks` (GPU otherwise idles at 306 of 625 MHz) and
   `sudo tegrastats` (the INA3221 power rails are not readable by the user).
 
 All measurements run in one resumable script, detached from VS Code:
@@ -127,9 +127,9 @@ images of each from the workstation into `~/data/waste/_edge_test/{mju,bepli}/` 
 
 ## Files not in git
 
-> **Agent: warn the owner before any Jetson step.** The files below are excluded by `.gitignore`
+> The files below are excluded by `.gitignore`
 > (`runs/*/`, `*.onnx`, `*.engine`, `*.pt`, `export/`) or live outside the repository. A fresh clone on the
-> Jetson does not have them. Ask the owner to copy them, and check they are present before running anything.
+> Jetson does not have them: copy them and check they are present before running anything.
 
 | Needed for | File (on the training workstation) | Size | How it is produced |
 |---|---|---|---|

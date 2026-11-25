@@ -1,0 +1,189 @@
+run_name: e6_edge_640
+output_dir: runs
+device: auto
+seed: 42
+schema: atlas/schema.yaml
+atlases:
+- atlas/taco.yaml
+- atlas/zerowaste.yaml
+- atlas/bepli.yaml
+- atlas/binary.yaml
+novel_atlases:
+- atlas/novel_field_classes.yaml
+text_model: openai/clip-vit-base-patch16
+text_cache: runs/_cache/text_clip_b16.pt
+strict_atlas: true
+data_root: ~/data/waste
+datasets_file: configs/datasets.yaml
+train_datasets: null
+val_datasets: null
+test_datasets: null
+holdout:
+- Glass bottle
+- Pop tab
+- Plastic straw
+- Crisp packet
+- Paper bag
+- Foam cup
+- Egg carton
+model:
+  backbone: sam2
+  sam_ckpt: facebook/sam2.1-hiera-tiny
+  image_size: 640
+  adapter_dim: 64
+  adapter_where: attn
+  lora_rank: 0
+  lora_alpha: 16.0
+  train_decoder: true
+  train_patch_embed: false
+  mixstyle_p: 0.5
+  geometry: false
+  desc_hidden: 256
+  text_rank: 128
+  ring_cells: 3
+  adversary: true
+train:
+  epochs: 40
+  epoch_size: 4000
+  batch_size: 6
+  val_batch_size: 12
+  num_workers: 6
+  amp: true
+  lr_heads: 0.0003
+  lr_peft: 0.0001
+  lr_decoder: 5.0e-05
+  weight_decay: 0.0001
+  warmup_steps: 300
+  grad_clip: 1.0
+  patience: 8
+  val_every: 1
+  dataset_alpha: 0.5
+  transplant_p: 0.5
+  transplant_cross_only: true
+  transplant:
+    max_objects: 6
+    scale:
+    - 0.6
+    - 1.3
+    harmonize: 0.5
+    feather: 1.5
+  aug:
+    strength: 1.0
+    vflip: false
+  loss:
+    mask: 1.0
+    contour: 0.5
+    desc: 1.0
+    dense: 0.5
+    dense_pixels: 16
+    adv: 0.1
+    adv_grl: 1.0
+    pos_weight: 2.0
+  accum_steps: 2
+  val_num_workers: 3
+  val_prefetch: 1
+  pin_memory: false
+eval:
+  naming:
+    weights:
+      dap: 1.0
+      proto: 1.0
+      prose: 0.5
+    conf_thr: 0.0
+    margin_thr: 0.0
+  n_perm: 2000
+datasets:
+- name: taco
+  type: coco
+  images_dir: TACO/data
+  ann_file: TACO/data/annotations.json
+  split:
+    seed: 42
+    fractions:
+      train: 0.7
+      val: 0.1
+      test: 0.2
+  scene_map:
+    Indoor, Man-made: an indoor floor
+    Pavement: pavement or road
+    Sand, Dirt, Pebbles: sand, soil or pebbles
+    Trash: a pile of other waste
+    Vegetation: grass or vegetation
+    Water: water
+- name: zerowaste
+  type: coco
+  surroundings: a conveyor belt in a recycling plant
+  splits:
+    train:
+      images_dir: zerowaste-f/train
+      ann_file: zerowaste-f/train/labels.json
+      negatives_dir: zerowaste-f/train/belt
+    val:
+      images_dir: zerowaste-f/val
+      ann_file: zerowaste-f/val/labels.json
+      negatives_dir: zerowaste-f/val/belt
+    test:
+      images_dir: zerowaste-f/test
+      ann_file: zerowaste-f/test/labels.json
+      negatives_dir: zerowaste-f/test/belt
+- name: uavvaste
+  type: coco
+  class_map:
+    '*': waste
+  surroundings: a seen-from-above aerial view of the ground
+  splits:
+    train:
+      images_dir: UAVVaste
+      ann_file: UAVVaste/annotations_train.json
+    val:
+      images_dir: UAVVaste
+      ann_file: UAVVaste/annotations_val.json
+    test:
+      images_dir: UAVVaste
+      ann_file: UAVVaste/annotations_test.json
+- name: mju
+  type: voc
+  root: MJU-Waste
+  entry: waste
+  image_ext: .png
+  waste_colors:
+  - - 128
+    - 0
+    - 0
+  surroundings: an indoor floor
+  splits:
+    train:
+      split_file: train
+    val:
+      split_file: val
+    test:
+      split_file: test
+- name: bepli
+  type: coco
+  class_map:
+    pet_bottle: Clear plastic bottle
+    other_bottle: Other plastic bottle
+    plastic_bag: Plastic bag
+    box_shaped_case: Plastic box or case
+    other_container: Other plastic container
+    rope: Rope & strings
+    other_string: Rope & strings
+    fishing_net: Fishing net
+    buoy: Buoy or float
+    other_fishing_gear: Other fishing gear
+    styrene_foam: Styrofoam piece
+    others: Other plastic
+    fragment: Plastic fragment
+  eval_only_entries:
+  - Fishing net
+  surroundings: sand, soil or pebbles
+  splits:
+    train:
+      images_dir: BePLi_v2/train
+      ann_file: BePLi_v2/train/annotations.json
+    val:
+      images_dir: BePLi_v2/val
+      ann_file: BePLi_v2/val/annotations.json
+    test:
+      images_dir: BePLi_v2/test
+      ann_file: BePLi_v2/test/annotations.json

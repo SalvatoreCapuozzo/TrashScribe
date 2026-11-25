@@ -6,7 +6,7 @@ environment, as the edge model receives more data from the site.
 Bars (one-hue ramp, light to dark = more site data): leave-one-dataset-out model (no site data, E3), fine-tuned
 on SAM 3 labels of the site's unlabelled images (E9), fine-tuned with 10 labelled site images (E10), site in
 training (E4). Dashed orange segment: SAM 3 zero-shot with the same half-image rule (16 prompts). Palette
-validated with the dataviz skill's validator (ordinal ramp + orange vs blue, all checks pass). CPU only.
+checked for an ordinal ramp and orange-vs-blue contrast (all checks pass). CPU only.
 """
 import _bootstrap  # noqa: F401
 import json
@@ -83,6 +83,7 @@ def main():
     fig.add_artist(l1)
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.17, top=0.74)
     out = Path(_p("paper/figures/ladder"))
+    out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out.with_suffix(".pdf"), dpi=300)
     fig.savefig(out.with_suffix(".png"), dpi=200)
     print("wrote", out.with_suffix(".pdf"))

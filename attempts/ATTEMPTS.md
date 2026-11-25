@@ -222,7 +222,7 @@ Results so far: E9-TACO 0.783 and E10-BePLi 0.454 above SAM 3 (0.713, 0.424); E1
 Fix: `trashscribe/data/canonical.py` imported albumentations at module level and `edge_runtime.py` imports
 that module, so the Jetson runtime would have failed (albumentations is not in requirements-jetson.txt); the
 import is now inside `build_augment`. Edge export of E6 done (`runs/e6_edge_640/export/`).
-Docs: `AGENTS.md`, `CLAUDE.md`, `docs/{CONTEXT,ARCHITECTURE,EXPERIMENTS,OPERATIONS,JETSON,NEXT_STEPS,MIGRATION}.md`.
+Docs: `docs/{ARCHITECTURE,EXPERIMENTS,OPERATIONS,JETSON}.md`.
 
 ## A18 — 2026-11-18 — first steps on the Jetson (e6_edge_640)
 Hypothesis: the exported E6 graph builds and runs on the owner's Orin Nano as documented in `docs/JETSON.md`.
