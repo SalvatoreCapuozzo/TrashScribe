@@ -1,0 +1,7 @@
+- [Working preferences](working-preferences.md) — no commits unless asked; queue by significance; report in RESULTS/ATTEMPTS; honest claims
+- [Paper style rules](paper-style-rules.md) — no em dashes, no ", and", few subsections, roadmap, lead-ins, American English, review criteria
+- [American English](american-english.md) — owner writes American English; American spelling in papers, figures, docs
+- [Paper decisions](paper-decisions.md) — NCAA 30 Nov; do not cite LENTE; rover use case; owner inserts the repo link
+- [Honest SAM 3 claim](honest-sam3-claim.md) — no site data: SAM 3 ahead on all five (not four); cheap data: 4/5; site seen: 5/5; SegFormer as good
+- [Host RAM and systemd-oomd](host-ram-oomd.md) — heavy jobs from the VS Code terminal got VS Code killed; use capped systemd-run units
+- [TrashScribe state](trashscribe-state.md) — state on leaving LENTE (25 Nov 2026): grid done, paper final, what is open
