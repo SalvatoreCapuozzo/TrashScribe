@@ -107,8 +107,8 @@ jobs:
   # 8. Supervised baseline on the weak transfers (SegFormer took 11 h on MJU: 40 epochs, no early stop).
   - {name: e3_lodo_uavvaste__segformer_mit-b2, kind: segformer, config: configs/exp/e3_lodo_uavvaste.yaml, max_attempts: 6}
   - {name: e3_lodo_bepli__segformer_mit-b2, kind: segformer, config: configs/exp/e3_lodo_bepli.yaml, max_attempts: 6}
-  # 9. Does adding description cost segmentation? (LENTE recipe, no descriptor head)
-  - {name: e5_ablate_lente_rgb, config: configs/exp/e5_ablate_lente_rgb.yaml}
+  # 9. Does adding description cost segmentation? (segmentation only, no descriptor head)
+  - {name: e5_ablate_seg_only, config: configs/exp/e5_ablate_seg_only.yaml}
   # 10. Table completion: E1 BePLi, SegFormer where transfer already works.
   - {name: e1_indomain_bepli, config: configs/exp/e1_indomain_bepli.yaml}
   - {name: e3_lodo_taco__segformer_mit-b2, kind: segformer, config: configs/exp/e3_lodo_taco.yaml, max_attempts: 6}

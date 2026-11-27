@@ -89,7 +89,7 @@ def ablation():
             ("-- all three", "e5_ablate_no_debias", "all"),
             ("-- dense pixel loss", "e5_ablate_no_dense", "all"),
             ("closed-vocabulary probe head", "e5_ablate_probe", "desc"),
-            ("no description (segmentation only)", "e5_ablate_lente_rgb", "seg"),
+            ("no description (segmentation only)", "e5_ablate_seg_only", "seg"),
             ("Full, 640\\,px (deployed model, E6)", "e6_edge_640", "all")]
     rows = []
     for label, r, what in runs:
@@ -139,7 +139,10 @@ def edge():
         pm = b.get("pipeline_ms", {})
         rows.append(f"{b['backend'].replace('_', ' ')} & {b['size']} & {b['net_ms_mean']:.1f} & {b['net_fps']:.1f} & "
                     f"{pm.get('total_ms', float('nan')):.1f} & {b.get('cuda_peak_mem_mb', float('nan')):.0f} \\\\")
-    write("tab_edge", "\n".join(rows) + "\n" if rows else "\\multicolumn{6}{c}{-- (measure on the Jetson) --} \\\\\n")
+    if not rows:          # on-device results live on the board (runs/e6_edge_640/jetson_jp6/summary.md)
+        print("tab_edge: no on-device benchmark in runs/, table not written")
+        return
+    write("tab_edge", "\n".join(rows) + "\n")
 
 
 if __name__ == "__main__":

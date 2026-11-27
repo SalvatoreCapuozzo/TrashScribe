@@ -45,7 +45,7 @@ def main():
         "adapters_both": ("adapters after attention AND MLP (Houlsby)", "model: {adapter_where: both}"),
         "probe": ("closed-vocabulary linear probe instead of the open descriptor head (reference; naming n/a)",
                   "model: {closed_vocab_probe: true}"),
-        "lente_rgb": ("LENTE recipe only: waste mask, no descriptor head, no debiasing",
+        "seg_only": ("segmentation only: waste mask, no descriptor head, no debiasing",
                       "model: {adversary: false, mixstyle_p: 0.0}\n"
                       "train: {transplant_p: 0.0, loss: {desc: 0.0, dense: 0.0, adv: 0.0}}"),
         "geometry": ("depth-gated early guidance (run scripts/precompute_depth.py and set depth_dir first)",

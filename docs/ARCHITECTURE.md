@@ -49,7 +49,7 @@ workstation; the device never runs the text encoder.
 | Module | File | Notes |
 |---|---|---|
 | `TrashScribe`, `ModelConfig`, `pool_objects`, `TrashScribeEdge` | `trashscribe.py` | config flags: `adapter_dim`, `adapter_where`, `lora_rank`, `mixstyle_p`, `geometry`, `adversary`, `closed_vocab_probe` (E5 reference), `clip_field` (E8) |
-| `Sam2Backbone` (LENTE recipe), `TinyBackbone` (tests) | `backbone.py` | SAM2.1-Hiera-Tiny from Hugging Face `facebook/sam2.1-hiera-tiny`, frozen; patch embedding frozen; adapters after attention in 12 blocks; decoder fed the not-a-point embedding |
+| `Sam2Backbone` (frozen SAM 2.1 + adapters), `TinyBackbone` (tests) | `backbone.py` | SAM2.1-Hiera-Tiny from Hugging Face `facebook/sam2.1-hiera-tiny`, frozen; patch embedding frozen; adapters after attention in 12 blocks; decoder fed the not-a-point embedding |
 | `Adapter`, `LoRALinear`, `MixStyle` | `peft.py` | all start as identity |
 | `DescriptorField`, `ClipField`, `ContourHead`, `TextReprojection`, `FieldScorer`, `GeometryGuidance`, `EnvironmentAdversary` | `heads.py` | only `tau_f`, `b_f` are field-specific (18 scalars); nothing indexed by value or class |
 

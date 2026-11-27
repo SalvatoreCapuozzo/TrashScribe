@@ -65,7 +65,7 @@ All numbers with `sudo jetson_clocks` (GPU locked at 624.75 MHz), 15 W, desktop 
 Reproduce (everything resumable; about 40 min plus 10 min for SAM 3):
 
 ```bash
-cd ~/LENTE/TrashScribe
+cd ~/TrashScribe
 python scripts/fetch_edge_images.py --n 30          # same deterministic 30 test images per dataset as on JetPack 5
 sudo jetson_clocks                                  # the suite waits for it
 systemd-run --user --unit=trashscribe-jetson --collect --working-directory=$PWD \
@@ -104,7 +104,7 @@ needs JetPack 6.2). What changed to make the pipeline run there:
 All measurements run in one resumable script, detached from VS Code:
 
 ```bash
-cd ~/LENTE/TrashScribe
+cd ~/TrashScribe
 python scripts/fetch_edge_images.py --n 30          # 30 test-split images each of TACO, ZeroWaste-f, UAVVaste (range requests, no full archives)
 systemd-run --user --unit=trashscribe-jetson --collect --working-directory=$PWD \
   -p StandardOutput=append:$PWD/runs/e6_edge_640/jetson/suite.log -p StandardError=append:$PWD/runs/e6_edge_640/jetson/suite.log \

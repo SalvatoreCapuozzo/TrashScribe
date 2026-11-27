@@ -50,7 +50,7 @@ gets 0.29 unseen (synthetic) — training sharpens seen classes.
   0.08 (= chance 0.083), seen 0.65. Too conservative.
 * Report three numbers on real data: default point, val-calibrated point, AUSUC (calibration-free).
 * Next options, in order: (1) leave-class-out calibration on validation (fit γ with a fold of seen
-  classes removed from the *atlas*, as MIRF fitted fusion weights leave-one-class-out);
+  classes removed from the *atlas*, as fusion weights are fitted leave-one-class-out);
   (2) `calib_keep` 0.8; (3) heavier weight on the descriptor-agreement stream, which is less
   biased by construction. Decide on E4 real data, not on synthetic.
 
@@ -83,7 +83,7 @@ the GPU machine. Free disk on the Mac ≈ 8 GB: datasets go on the workstation.
   - statsmodels 0.14.0 -> 0.14.5 (imported, crashed on use: numpy dtype size mismatch)
   - left as is: `datasets` 2.12.0 (incompatible with pyarrow 25, nothing depends on it; 2.21 would
     downgrade fsspec under s3fs/dask, 3.x/4.x would pull huggingface_hub 2.x and break transformers 4.41)
-  - absent, listed in LENTE's requirements-windows.txt: h5py, rasterio, segmentation-models-pytorch
+  - absent and not needed: h5py, rasterio, segmentation-models-pytorch
 * SAM2 sanity run re-evaluated with the validation-calibrated naming (gamma = 1.0).
 
 ## A9 — 2026-11-05 — NVIDIA machine (RTX 3080 Laptop 8 GB), real data, grid started
@@ -331,6 +331,18 @@ Checked every on-device number against A21/A22. Fixed: stale depth gate in the p
 Implementation paragraph (split); "too large" → "too slow" for SAM 3 on the device; unhedged interpretations;
 missing SegFormer finding in the conclusions; on-device table 24 pt too wide (TRT/PT abbreviations, 4 pt column
 spacing); caption trimmed to column definitions.
+
+
+## A24 — 2026-11-27 — pre-submission check of the manuscript
+Every number in the text and tables checked again against `runs/*/test_metrics.json`, the post-hoc files and the
+JetPack 6.2 measurements (A21, A22); `make_tables.py` regenerates identical tables. No new run since 25 Nov.
+Fixes: within-class leakage figures (6.9 / 20.7, 9.7, 6.8) are means over the 7 of the 15 classes with at least 20
+objects and a majority rate below 0.9 (the filter of A13), now stated, with the all-15 values (2.9 / 15.4) added;
+CLIP and distilled-head retrieval (0.078, 0.082) use the class name as prompt, now stated; SAM 3 labels: above
+SAM 3 on TACO, level on ZeroWaste-f and MJU-Waste (+2.2, +1.0), the same reading as the +2.0 of ten labels on TACO;
+energy: 0.72 J is the whole board (13.8 W) over the 52 ms network pass of the Python power loop, not the 8.1 W
+above idle; batch 12 for E6; code and weights availability. `make_tables.py` no longer writes a placeholder
+`tab_edge.tex` when no on-device benchmark is in `runs/` (the on-device table is written from the Jetson summary).
 
 ---
 

@@ -1,6 +1,6 @@
 """From a description to a name, by reading the atlas.
 
-Three evidence streams, each failing differently (as in the MIRF pipeline):
+Three evidence streams, each failing differently:
   dap    descriptor agreement: the descriptor posterior against each entry's
          profile, per intrinsic field, IDF-weighted (Lampert et al., 2014)
   proto  text-space prototype: the object embedding against the weighted mean of

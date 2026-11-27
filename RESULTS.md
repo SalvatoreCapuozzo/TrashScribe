@@ -10,7 +10,7 @@ The grid runs as its own systemd user service, outside VS Code, with a RAM cap (
 below for why):
 
 ```bash
-cd ~/LENTE/TrashScribe
+cd ~/TrashScribe
 systemd-run --user --unit=trashscribe-queue --collect \
   -p MemoryMax=8G -p MemorySwapMax=0 -p OOMPolicy=continue \
   --working-directory=$PWD --setenv=HF_HUB_OFFLINE=1 \
@@ -22,7 +22,7 @@ systemctl --user stop trashscribe-queue        # stop; starting again resumes fr
 **Live progress** (done / now / next, with ETAs):
 ```bash
 conda activate trashscribe
-cd ~/LENTE/TrashScribe
+cd ~/TrashScribe
 python scripts/progress.py --watch 30      # refresh every 30 s, Ctrl-C to quit; without --watch: one snapshot
 ```
 
@@ -301,7 +301,7 @@ verified: unchanged loss when off, zero gradient on dropped values, unit tests, 
 *Queue changes (13 Nov).* Removed (configs kept, re-add the line to restore): `e5_ablate_lora8`,
 `e5_ablate_adapters_both`, `e5_ablate_geometry`, `e2_multi_domain` (≈ 31 GPU-hours). Added
 `e7_heldout_values`. New order: probe → E7 → no_dense → no_debias → SegFormer LODO × 5 → E1 × 5 →
-lente_rgb.
+seg_only.
 
 **2026-11-15, 17:00 — runs finished 13–15 Nov, why SegFormer failed, E7 verdict, improvements.**
 Finished: closed probe, E7, −dense, −debias, E1 TACO / ZeroWaste-f / UAVVaste (E1-MJU running).
@@ -400,7 +400,7 @@ Finished: closed probe, E7, −dense, −debias, E1 TACO / ZeroWaste-f / UAVVast
   "transfer at edge cost" (34 M parameters, one pass, description included), not "better transfer".
 
 *Queue (15 Nov 17:45):* E1-MJU → **SAM 3 zero-shot** → **Grounding DINO→SAM 2 zero-shot** → **E8** →
-SegFormer-MJU → **E3b** → E1-BePLi → SegFormer UAVVaste, BePLi, TACO, ZeroWaste-f → lente_rgb.
+SegFormer-MJU → **E3b** → E1-BePLi → SegFormer UAVVaste, BePLi, TACO, ZeroWaste-f → seg_only.
 
 **2026-11-15, 18:30 — manuscript style pass (user request).** No em dashes, no ", and" constructs,
 headings without parentheses or whole phrases, fewer subsections (Related work 3, Method 4, Setup 2,
@@ -430,7 +430,7 @@ precision 0.32 (other desk objects labelled too: MJU annotates only the hand-hel
 config initialises from `runs/e3_lodo_mju/best.pt`, trains, validates and tests.
 *Order now:* E1-MJU (running) → SAM 3 zero-shot 16 prompts (full test) → [SAM 3 labels → E9] for
 MJU, UAVVaste, BePLi → E8 → SegFormer-MJU → E3b → SAM 3 4-word and Grounding DINO zero-shot →
-SegFormer UAVVaste, BePLi → E1-BePLi → SegFormer TACO, ZeroWaste-f → lente_rgb. Grid end ≈ Thu 19 Nov
+SegFormer UAVVaste, BePLi → E1-BePLi → SegFormer TACO, ZeroWaste-f → seg_only. Grid end ≈ Thu 19 Nov
 early morning (upper bound).
 
 **2026-11-16, morning — overnight results (all jobs ok; E8 running, epoch 13, val IoU 0.81).**
@@ -493,7 +493,7 @@ edge model with SAM 3 labels reaches 88–105 % of SAM 3 at a new site with 34 M
 belongs to the protocol (no indoor negatives anywhere in training), not to TrashScribe.
 *Queue (by significance):* E3b (running) → **E9 on TACO and ZeroWaste-f** (completes the SAM 3-teacher
 column; the LODO model is already close to SAM 3 there) → SAM 3 4-word and Grounding DINO columns →
-SegFormer UAVVaste, BePLi → lente_rgb → E1-BePLi → SegFormer TACO, ZeroWaste-f.
+SegFormer UAVVaste, BePLi → seg_only → E1-BePLi → SegFormer TACO, ZeroWaste-f.
 
 **2026-11-17, 12:15 — E8: the distilled CLIP field** (`runs/_posthoc_e8.log`, `runs/e8_clip_distill/posthoc/`,
 `runs/_posthoc_values_e8.json`). Standard metrics as E7 (IoU 0.870, mAP 0.658 vs 0.664, val-calibrated H 0.135
@@ -581,7 +581,7 @@ New runs (fair SAM 3 = 16 prompts, masks ≤ half image):
   plausibly scale (frozen encoder keeps ground-level object sizes).
 * SAM 3 with the 4 waste words: TACO 0.443, ZeroWaste-f 0.774, UAVVaste 0.417, MJU 0.119, BePLi 0.420 (fair):
   the 16 prompts are stronger on every dataset. Grounding DINO→SAM 2: 0.510 / 0.273 / 0.183 / 0.154 / 0.180.
-* `e5_ablate_lente_rgb` (no description at all): pooled IoU 0.877 vs E4 0.870: description costs nothing.
+* `e5_ablate_seg_only` (no description at all): pooled IoU 0.877 vs E4 0.870: description costs nothing.
 * Jetson (owner, 18 Nov; JetPack 5.1.1, TRT 8.5.2, 15 W, clocks NOT locked, 0.6 GB free at build): FP16 engine
   119.3 ms (8.3 FPS), FP32 189.3 ms; full pipeline 184 / 178 / 218 ms on TACO / UAVVaste / ZeroWaste-f (5.4 / 5.6 /
   4.6 FPS); FP16 vs FP32 mask IoU ≥ 0.995. SAM 3 cannot run on JetPack 5.1 (Python 3.8). Power, peak memory and
@@ -680,7 +680,7 @@ Snapshot 2026-11-20 16:00 · service inactive · RAM ?/? GB · GPU 35% · 0.1 GB
 | 42 | `e4_heldout_classes__zeroshot_gdino` | done |  |  | 24 min |  |
 | 43 | `e3_lodo_uavvaste__segformer_mit-b2` | done | 40/40 | ep 36: IoU 0.865 | 12.1 h |  |
 | 44 | `e3_lodo_bepli__segformer_mit-b2` | done | 30/40 | ep 22: IoU 0.909 | 8.7 h |  |
-| 45 | `e5_ablate_lente_rgb` | done | 39/40 | ep 31: IoU 0.841, mAP 0.276 | 7.3 h |  |
+| 45 | `e5_ablate_seg_only` | done | 39/40 | ep 31: IoU 0.841, mAP 0.276 | 7.3 h |  |
 | 46 | `e1_indomain_bepli` | done | 36/40 | ep 28: IoU 0.669, mAP 0.710 | 6.8 h |  |
 | 47 | `e3_lodo_taco__segformer_mit-b2` | done | 39/40 | ep 31: IoU 0.858 | 12.2 h |  |
 | 48 | `e3_lodo_zerowaste__segformer_mit-b2` | done | 40/40 | ep 35: IoU 0.755 | 12.0 h |  |
@@ -722,7 +722,7 @@ Naming = generalised zero-shot top-1 over the atlas (seen classes / held-out cla
 | `e10_k10_mju` | 0.751 | 0.502 | – (–) | – / – / – | – / – / – | – | 0.900 | – (–) |
 | `e10_k50_uavvaste` | 0.294 | 0.768 | – (–) | – / – / – | – / – / – | – | 0.600 | – (–) |
 | `e9_sam3_zerowaste` | 0.805 | 0.287 | 0.390 (0.333) | – / 0.004 / – | – / 0.021 / – | – | 0.200 | – (–) |
-| `e5_ablate_lente_rgb` | 0.877 | 0.574 | 0.252 (0.226) | 0.007 / 0.074 / 0.013 | 0.007 / 0.074 / 0.013 | 0.001 | 0.000 | 0.974 (0.748) |
+| `e5_ablate_seg_only` | 0.877 | 0.574 | 0.252 (0.226) | 0.007 / 0.074 / 0.013 | 0.007 / 0.074 / 0.013 | 0.001 | 0.000 | 0.974 (0.748) |
 | `e1_indomain_bepli` | 0.650 | 0.607 | 0.701 (0.370) | 0.244 / 0.000 / 0.000 | 0.220 / 0.000 / 0.000 | 0.029 | 0.400 | – (–) |
 
 ### Waste segmentation per test dataset (IoU / boundary F1)
@@ -768,7 +768,7 @@ Naming = generalised zero-shot top-1 over the atlas (seen classes / held-out cla
 | `e4_heldout_classes__zeroshot_gdino` | 0.510 / 0.532 | 0.273 / 0.135 | 0.183 / 0.482 | 0.154 / 0.170 | 0.180 / 0.132 | 0.266 |
 | `e3_lodo_uavvaste__segformer_mit-b2` |  |  | 0.480 / 0.702 |  |  | 0.480 |
 | `e3_lodo_bepli__segformer_mit-b2` |  |  |  |  | 0.276 / 0.314 | 0.276 |
-| `e5_ablate_lente_rgb` | 0.876 / 0.737 | 0.920 / 0.399 | 0.491 / 0.802 | 0.909 / 0.678 | 0.631 / 0.583 | 0.877 |
+| `e5_ablate_seg_only` | 0.876 / 0.737 | 0.920 / 0.399 | 0.491 / 0.802 | 0.909 / 0.678 | 0.631 / 0.583 | 0.877 |
 | `e1_indomain_bepli` |  |  |  |  | 0.650 / 0.607 | 0.650 |
 | `e3_lodo_taco__segformer_mit-b2` | 0.746 / 0.571 |  |  |  |  | 0.746 |
 | `e3_lodo_zerowaste__segformer_mit-b2` |  | 0.741 / 0.271 |  |  |  | 0.741 |

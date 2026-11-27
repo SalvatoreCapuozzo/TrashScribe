@@ -1,6 +1,6 @@
 """Shared encoder + class-agnostic waste decoder.
 
-Sam2Backbone is the LENTE recipe applied to RGB waste imagery: SAM2-Hiera-Tiny
+Sam2Backbone applies a frozen-encoder recipe to RGB waste imagery: SAM2-Hiera-Tiny
 frozen, zero-initialised adapters (and optionally LoRA) inside the encoder, the
 mask decoder trained prompt-free so that it answers one question for every
 dataset: "which pixels are waste?".
@@ -21,7 +21,7 @@ LEVEL_CHANNELS = (32, 64, 256)
 
 
 def _sam2_config(ckpt: str, image_size: int):
-    """Sam2Config at a resolution other than 1024 (same logic as LENTE).
+    """Sam2Config at a resolution other than 1024 .
 
     Hiera's position embeddings are interpolated, so no weight changes shape; but
     `backbone_feature_sizes` and the prompt/decoder image sizes are hard-wired
@@ -53,7 +53,7 @@ class Sam2Backbone(nn.Module):
         self.image_size = int(image_size)
         cfg = None if self.image_size == 1024 else _sam2_config(ckpt, self.image_size)
         self.model = Sam2Model.from_pretrained(ckpt, config=cfg) if cfg else Sam2Model.from_pretrained(ckpt)
-        # Same fix as LENTE: in eval SAM2 would swap mask 0 for an untrained one.
+        # In eval SAM2 would swap mask 0 for an untrained one.
         self.model.mask_decoder.dynamic_multimask_via_stability = False
         for p in self.model.parameters():
             p.requires_grad = False

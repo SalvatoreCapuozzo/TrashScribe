@@ -70,7 +70,7 @@ class TrashScribe(nn.Module):
         self.text_proj = TextReprojection(text_dim, cfg.text_rank)
         self.scorer = FieldScorer(n_fields)
         self.adversary = EnvironmentAdversary(text_dim, n_env) if (cfg.adversary and n_env > 1) else None
-        # Closed-vocabulary reference (the "Probe" of the MIRF paper): a linear head
+        # Closed-vocabulary reference (the "Probe" column of the description table): a linear head
         # with a weight per training descriptor. It cannot score a phrase it was
         # not trained on, which is exactly what the comparison is meant to show.
         self.probe = None

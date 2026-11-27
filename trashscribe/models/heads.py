@@ -73,7 +73,7 @@ class ContourHead(nn.Module):
 
 class TextReprojection(nn.Module):
     """W_t e = e + A sigma(B e), A zero-initialised: starts at the raw text space
-    and departs from it only where the data supports it (as in the MIRF head)."""
+    and departs from it only where the data supports it."""
 
     def __init__(self, dim=512, rank=128):
         super().__init__()
@@ -105,9 +105,8 @@ class FieldScorer(nn.Module):
 
 
 class GeometryGuidance(nn.Module):
-    """LENTE's DSDF early guidance, transposed to waste: the terrain (DEM + slope)
-    becomes scene geometry (relative depth + its gradient magnitude), from an
-    RGB-D sensor or a monocular depth model. Output is a multiplicative gain
+    """Early geometric guidance: scene geometry (relative depth + its gradient
+    magnitude), from an RGB-D sensor or a monocular depth model. Output is a multiplicative gain
     1 + tanh(.) whose last conv is zero-initialised: identity at step 0, so the
     frozen encoder sees its pre-training distribution until the gate learns."""
 

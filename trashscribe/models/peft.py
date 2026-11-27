@@ -1,4 +1,4 @@
-"""Parameter-efficient modules inherited from LENTE, plus MixStyle.
+"""Parameter-efficient modules (adapters, LoRA) plus MixStyle.
 
 All of them start as the identity (zero-initialised up/B projections, MixStyle
 inactive at eval), so the frozen foundation model is exactly reproduced at step 0.
@@ -10,7 +10,7 @@ import torch.nn as nn
 
 
 class Adapter(nn.Module):
-    """Bottleneck adapter with residual bypass; up-projection zero-initialised (LENTE)."""
+    """Bottleneck adapter with residual bypass; up-projection zero-initialised."""
 
     def __init__(self, dim: int, bottleneck: int = 64):
         super().__init__()
@@ -25,7 +25,7 @@ class Adapter(nn.Module):
 
 
 class LoRALinear(nn.Module):
-    """y = W x + (alpha / r) B A x with W frozen and B zero-initialised (LENTE)."""
+    """y = W x + (alpha / r) B A x with W frozen and B zero-initialised."""
 
     def __init__(self, base: nn.Linear, r: int, alpha: float):
         super().__init__()

@@ -24,7 +24,7 @@ model:
   backbone: sam2
   sam_ckpt: facebook/sam2.1-hiera-tiny
   image_size: 1024
-  adapter_dim: 64            # LENTE adapters (zero-init), 0 disables
+  adapter_dim: 64            # bottleneck adapters (zero-init), 0 disables
   adapter_where: attn        # attn | mlp | both
   lora_rank: 0               # LoRA on qkv/proj, 0 disables
   lora_alpha: 16.0

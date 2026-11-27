@@ -6,7 +6,7 @@
             --detector sam3: SAM 3 (promptable concept segmentation) returns instance masks for
             each noun phrase of --sam3-prompts directly (score >= 0.5); their union is the mask.
   describe  raw CLIP on each ground-truth object crop vs the descriptor phrases
-            (the "raw CLIP" column of the MIRF tables): descriptor mAP
+            (the "CLIP" column of the description table): descriptor mAP
   name      raw CLIP crop vs atlas prose, generalised zero-shot top-1
   pseudo    (--detector sam3) SAM 3 as an OFFLINE TEACHER: masks for the train / val images of the
             config's test dataset (E9: the site the model must be adapted to; labels never used).
@@ -276,7 +276,7 @@ if "describe" in a.tasks:
             if len(ys) == 0:
                 continue
             y0, y1, x0, x1 = 4 * ys.min(), 4 * (ys.max() + 1), 4 * xs.min(), 4 * (xs.max() + 1)
-            cy, cx, h, w = (y0 + y1) / 2, (x0 + x1) / 2, (y1 - y0) * 1.35, (x1 - x0) * 1.35   # MIRF tight crop
+            cy, cx, h, w = (y0 + y1) / 2, (x0 + x1) / 2, (y1 - y0) * 1.35, (x1 - x0) * 1.35   # crop of 1.35 times the box
             crop = img[max(0, int(cy - h / 2)):int(cy + h / 2) + 1, max(0, int(cx - w / 2)):int(cx + w / 2) + 1]
             with torch.no_grad():
                 z = F.normalize(_vec(cm.get_image_features(**cp(images=crop, return_tensors="pt").to(dev))), dim=-1)
